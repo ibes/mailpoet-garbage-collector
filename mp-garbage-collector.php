@@ -29,7 +29,6 @@ class MpGarbageCollector {
 		/* Add admin notice */
 		add_action( 'admin_notices', [ $this, 'handle_admin_notice'] );
 		add_action( 'cron_mp_garbage_collection_daily', [ $this, 'garbage_collection' ] );
-		$this->garbage_collection();
 	}
 
 	function activate() {
@@ -43,9 +42,9 @@ class MpGarbageCollector {
 		$schedule = wp_schedule_event( strtotime('1:00:00'), 'daily', 'cron_mp_garbage_collection_daily' );
 
 		if ( ! is_wp_error( $schedule ) ) {
-			set_transient( 'ms-garbage-collector-admin-notice-success', __( 'MP Garbage Collector cron job activated', 'mp-garbage-collection' ) , 5 );
+			set_transient( 'mp-garbage-collector-admin-notice-success', __( 'MP Garbage Collector cron job activated', 'mp-garbage-collection' ) , 5 );
 		} else {
-			set_transient( 'ms-garbage-collector-admin-notice-error', __( 'MP Garbage Collector cron job activation failed', 'mp-garbage-collection' ) , 5 );
+			set_transient( 'mp-garbage-collector-admin-notice-error', __( 'MP Garbage Collector cron job activation failed', 'mp-garbage-collection' ) , 5 );
 		}
 	}
 
@@ -75,26 +74,26 @@ class MpGarbageCollector {
 	function handle_admin_notice(){
 
 		/* Check transient, if available display notice */
-		if ( $message = get_transient( 'ms-garbage-collector-admin-notice-success' ) ){
-			$message = get_transient( 'ms-garbage-collector-admin-notice-success' )
+		if ( $message = get_transient( 'mp-garbage-collector-admin-notice-success' ) ){
+			$message = get_transient( 'mp-garbage-collector-admin-notice-success' )
 			?>
 			<div class="updated notice is-dismissible">
 				<p><?= $message ?></p>
 			</div>
 			<?php
 			/* Delete transient, only display this notice once. */
-			delete_transient( 'ms-garbage-collector-admin-notice-success' );
+			delete_transient( 'mp-garbage-collector-admin-notice-success' );
 		}
 
-		if ( get_transient( 'ms-garbage-collector-admin-notice-error' ) ){
-			$message = get_transient( 'ms-garbage-collector-admin-notice-error' );
+		if ( get_transient( 'mp-garbage-collector-admin-notice-error' ) ){
+			$message = get_transient( 'mp-garbage-collector-admin-notice-error' );
 			?>
 			<div class="notice notice-error is-dismissible">
 				<p><?= $message ?></p>
 			</div>
 			<?php
 			/* Delete transient, only display this notice once. */
-			delete_transient( 'ms-garbage-collector-admin-notice-error' );
+			delete_transient( 'mp-garbage-collector-admin-notice-error' );
 		}
 	}
 
